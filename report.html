@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Report Website</title>
+<style>
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  overflow:hidden;
+  background:black;
+  color:white;
+  position:relative;
+}
+#stars{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  z-index:-1;
+}
+
+/* Container */
+.page-container{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  min-height:100vh;
+  text-align:center;
+  padding:100px 20px 150px;
+}
+h1{
+  font-size:28px;
+  margin-bottom:10px;
+  font-family:monospace;
+  white-space: nowrap;
+  overflow:hidden;
+  border-right:3px solid white;
+}
+.clock{
+  font-size:18px;
+  margin-bottom:20px;
+  font-family:monospace;
+}
+
+/* Back Button */
+.back-btn{
+  position:relative;
+  overflow:hidden;
+  color:white;
+  text-decoration:none;
+  font-size:18px;
+  background: rgba(255,255,255,0.1);
+  backdrop-filter:blur(6px);
+  padding:8px 16px;
+  border-radius:12px;
+  border:1px solid white;
+  box-shadow:0 4px 10px rgba(0,0,0,0.3);
+  transition:0.2s all;
+  display:inline-block;
+  margin-top:20px;
+}
+.back-btn:hover{
+  background: rgba(255,255,255,0.25);
+  transform: scale(1.05);
+}
+.back-btn:active{
+  transform: scale(0.95);
+  box-shadow:0 0 15px white;
+  background: rgba(255,255,255,0.35);
+}
+.back-btn::after{
+  content:"";
+  position:absolute;
+  width:100%;
+  height:100%;
+  top:0;
+  left:0;
+  background:white;
+  opacity:0;
+  border-radius:12px;
+  pointer-events:none;
+}
+.back-btn.clicked::after{
+  animation:ripple 0.4s ease-out forwards;
+}
+@keyframes ripple{
+  0%{transform:scale(0);opacity:0.3;}
+  100%{transform:scale(2);opacity:0;}
+}
+
+/* Music Player */
+.music-player{
+  position:fixed;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  background:rgba(0,0,0,0.2);
+  backdrop-filter:blur(6px);
+  border-radius:16px;
+  padding:12px 20px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  color:white;
+  z-index:5;
+  width:90%;
+  max-width:500px;
+  border:1px solid rgba(255,255,255,0.3);
+  box-shadow:0 0 15px rgba(255,255,255,0.2);
+}
+.music-player img{
+  width:50px;
+  height:50px;
+  border-radius:8px;
+}
+.track-info{
+  display:flex;
+  flex-direction:column;
+  text-align:left;
+  font-size:12px;
+  flex:1;
+}
+#progress{
+  width:100%;
+  accent-color:white;
+}
+#playPause{
+  font-size:18px;
+  background: rgba(255,255,255,0.1);
+  border:none;
+  border-radius:6px;
+  padding:6px 12px;
+  cursor:pointer;
+  color:white;
+  transition:0.2s;
+}
+#playPause:hover{
+  background: rgba(255,255,255,0.25);
+  transform:scale(1.05);
+}
+
+/* Contact Info */
+.contact ul{
+  padding:0;
+  margin-top:10px;
+  text-align:left;
+  display:inline-block;
+}
+.contact li{
+  margin:6px 0;
+}
+</style>
+</head>
+<body>
+<canvas id="stars"></canvas>
+
+<div class="page-container">
+<h1 id="title">Report Website</h1>
+<div class="clock" id="clock">00:00:00 | Hari</div>
+<p>Jika menemukan error, silakan hubungi kami melalui:</p>
+<div class="contact">
+<ul>
+<li>Email: <a href="mailto:alifalifil26@gmail.com">alifalifil26@gmail.com</a></li>
+<li>WhatsApp: <a href="https://wa.me/6283827785183" target="_blank">+62 838-2778-5183</a></li>
+<li>Telegram: <a href="https://t.me/somelif26" target="_blank">@somelif26</a></li>
+<li>Instagram: <a href="https://instagram.com/somelif__" target="_blank">@somelif__</a></li>
+</ul>
+</div>
+<a href="index.html" class="back-btn">⬅ Kembali ke Home</a>
+</div>
+
+<div class="music-player">
+<img src="https://files.catbox.moe/otof75.jpg" alt="Cover">
+<div class="track-info">
+<div class="title">Style</div>
+<div class="artist">Taylor Swift</div>
+<input type="range" id="progress" value="0">
+<div class="time"><span id="current">0:00</span> / <span id="duration">0:00</span></div>
+</div>
+<button id="playPause">▶️</button>
+<audio id="audio" src="https://files.catbox.moe/njn5ax.mp3"></audio>
+</div>
+
+<script>
+// Back Button Ripple
+const backBtn=document.querySelector('.back-btn');
+backBtn.addEventListener('click',()=>{backBtn.classList.add('clicked'); setTimeout(()=>backBtn.classList.remove('clicked'),400);});
+
+// Title Typing
+const title=document.getElementById('title'); const text=title.textContent; title.textContent=''; let i=0;
+function typeTitle(){if(i<text.length){title.textContent+=text.charAt(i); i++; setTimeout(typeTitle,100);}else{title.style.borderRight='none';}} typeTitle();
+
+// Stars Background with Twinkle
+const canvas=document.getElementById('stars');
+const ctx=canvas.getContext('2d');
+let w=canvas.width=window.innerWidth;
+let h=canvas.height=window.innerHeight;
+const stars=[];
+for(let i=0;i<100;i++){
+  stars.push({x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.5,speed:Math.random()*0.1+0.05,alpha:Math.random(),delta:Math.random()*0.02});
+}
+function drawStars(){
+  ctx.clearRect(0,0,w,h);
+  stars.forEach(s=>{
+    ctx.beginPath();
+    ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+    ctx.fillStyle=`rgba(255,255,255,${s.alpha})`;
+    ctx.fill();
+    s.x+=s.speed;
+    if(s.x>w) s.x=0;
+    s.alpha+=s.delta;
+    if(s.alpha>1){ s.alpha=1; s.delta*=-1;}
+    if(s.alpha<0.1){ s.alpha=0.1; s.delta*=-1;}
+  });
+  requestAnimationFrame(drawStars);
+}
+drawStars();
+window.addEventListener('resize',()=>{w=canvas.width=window.innerWidth; h=canvas.height=window.innerHeight;});
+
+// Clock
+function updateClock(){
+  const now=new Date();
+  const h=String(now.getHours()).padStart(2,'0');
+  const m=String(now.getMinutes()).padStart(2,'0');
+  const s=String(now.getSeconds()).padStart(2,'0');
+  const day=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'][now.getDay()];
+  document.getElementById('clock').textContent=`${h}:${m}:${s} | ${day}`;
+}
+setInterval(updateClock,1000);
+updateClock();
+
+// Music Player
+const audio=document.getElementById("audio"); 
+const playPause=document.getElementById("playPause");
+const progress=document.getElementById("progress"); 
+const currentTime=document.getElementById("current");
+const durationTime=document.getElementById("duration");
+playPause.addEventListener("click",()=>{if(audio.paused){audio.play();playPause.textContent="⏸️";}else{audio.pause();playPause.textContent="▶️";}});
+audio.addEventListener("loadedmetadata",()=>{progress.max=Math.floor(audio.duration);durationTime.textContent=formatTime(audio.duration);});
+audio.addEventListener("timeupdate",()=>{progress.value=Math.floor(audio.currentTime);currentTime.textContent=formatTime(audio.currentTime);});
+progress.addEventListener("input",()=>{audio.currentTime=progress.value;});
+function formatTime(sec){ const m=Math.floor(sec/60); const s=Math.floor(sec%60).toString().padStart(2,"0"); return `${m}:${s}`; }
+</script>
+</body>
+</html>

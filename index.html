@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Naufal Alifil Adha</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Background Galaxy -->
+  <canvas id="stars"></canvas>
+
+  <!-- Container -->
+  <div class="container">
+    <img src="https://files.catbox.moe/sd7cvg.jpg" alt="Foto" class="profile-pic">
+    <h1>NAUFAL ALIFIL ADHA</h1>
+
+    <div class="buttons">
+      <a href="tentang.html" class="btn">TENTANG ALIFIL</a>
+      <a href="sosmed.html" class="btn">ALL SOSMED</a>
+      <a href="memory.html" class="btn">MEMORY DUMP</a>
+      <a href="report.html" class="btn">REPORT ERROR WEBSITE</a>
+    </div>
+  </div>
+
+  <!-- Music Player -->
+  <div class="music-player">
+    <img src="https://files.catbox.moe/otof75.jpg" class="cover" alt="Cover">
+    <div class="track-info">
+      <div class="title">Style</div>
+      <div class="artist">Taylor Swift</div>
+      <input type="range" id="progress" value="0">
+      <div class="time">
+        <span id="current">0:00</span> / <span id="duration">0:00</span>
+      </div>
+    </div>
+    <button id="playPause">▶️</button>
+    <audio id="audio" src="https://files.catbox.moe/njn5ax.mp3"></audio>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

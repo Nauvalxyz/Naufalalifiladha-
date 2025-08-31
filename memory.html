@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Memory Dump</title>
+<style>
+  /* Background Bintang */
+  #stars {
+    position: fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background:black;
+    z-index:-1;
+  }
+
+  /* Page Container */
+  .page-container {
+    display:flex;
+    flex-direction:column;
+    height:100vh;
+    color:white;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+    padding-top:70px;
+  }
+
+  /* Header */
+  .header{
+    display:flex;
+    align-items:center;
+    justify-content:flex-start;
+    padding:10px;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    z-index:2;
+    background:rgba(0,0,0,0.3);
+    backdrop-filter:blur(6px);
+    box-shadow:0 2px 10px rgba(0,0,0,0.3);
+  }
+
+  /* Tombol Back */
+  .back-btn{
+    position:relative;
+    overflow:hidden;
+    color:white;
+    text-decoration:none;
+    font-size:18px;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter:blur(6px);
+    padding:8px 16px;
+    border-radius:12px;
+    border:1px solid white;
+    box-shadow:0 4px 10px rgba(0,0,0,0.3);
+    transition:0.2s all;
+  }
+  .back-btn:hover{
+    background: rgba(255,255,255,0.25);
+    transform: scale(1.05);
+  }
+  .back-btn:active{
+    transform: scale(0.95);
+    box-shadow:0 0 15px white;
+    background: rgba(255,255,255,0.35);
+  }
+  .back-btn::after{
+    content:"";
+    position:absolute;
+    width:100%; height:100%;
+    top:0; left:0;
+    background:white;
+    opacity:0;
+    border-radius:12px;
+    pointer-events:none;
+  }
+  .back-btn.clicked::after{
+    animation:ripple 0.4s ease-out forwards;
+  }
+  @keyframes ripple{
+    0%{ transform:scale(0); opacity:0.3;}
+    100%{ transform:scale(2); opacity:0;}
+  }
+
+  /* Judul ketik */
+  h1{
+    font-size:28px;
+    margin-bottom:20px;
+    font-family:monospace;
+    white-space:nowrap;
+    overflow:hidden;
+    border-right:3px solid white;
+  }
+
+  /* Gallery Scroll */
+  .gallery-container{
+    flex:1;
+    overflow-y:auto;
+    margin-bottom:160px;
+  }
+  .gallery{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    padding:20px;
+    align-items:center;
+  }
+  .gallery-img{
+    width:300px;
+    border-radius:12px;
+    cursor:pointer;
+    transition: transform 0.3s, opacity 0.8s;
+    opacity:0;
+    transform:translateY(20px);
+  }
+  .gallery-img.visible{
+    opacity:1;
+    transform:translateY(0);
+  }
+  .gallery-img:hover{
+    transform:scale(1.03);
+  }
+
+  /* Modal Zoom */
+  .modal{
+    display:none;
+    position:fixed;
+    z-index:999;
+    padding-top:60px;
+    left:0; top:0;
+    width:100%; height:100%;
+    background-color: rgba(0,0,0,0.9);
+    justify-content:center;
+    align-items:center;
+  }
+  .modal img{
+    max-width:90%;
+    max-height:80%;
+    border-radius:10px;
+    box-shadow:0 0 20px #000;
+  }
+  .close{
+    position:absolute;
+    top:20px;
+    right:30px;
+    font-size:35px;
+    color:white;
+    cursor:pointer;
+  }
+
+  /* Music Player Transparan */
+  .music-player{
+    position:fixed;
+    bottom:20px;
+    left:50%;
+    transform:translateX(-50%);
+    background:rgba(0,0,0,0.2);
+    backdrop-filter:blur(6px);
+    border-radius:16px;
+    padding:12px 20px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color:white;
+    z-index:5;
+    width:90%;
+    max-width:500px;
+    border:1px solid rgba(255,255,255,0.3);
+    box-shadow:0 0 15px rgba(255,255,255,0.2);
+  }
+  .music-player img{
+    width:50px; height:50px;
+    border-radius:8px;
+  }
+  .track-info{
+    display:flex;
+    flex-direction:column;
+    text-align:left;
+    font-size:12px;
+    flex:1;
+  }
+  #progress{ width:100%; accent-color:white;}
+  #playPause{
+    font-size:18px;
+    background: rgba(255,255,255,0.1);
+    border:none;
+    border-radius:6px;
+    padding:6px 12px;
+    cursor:pointer;
+    color:white;
+    transition:0.2s;
+  }
+  #playPause:hover{ background: rgba(255,255,255,0.25); transform:scale(1.05);}
+</style>
+</head>
+<body>
+<canvas id="stars"></canvas>
+
+<div class="page-container">
+  <div class="header">
+    <a href="index.html" class="back-btn">⬅ Home</a>
+  </div>
+
+  <h1 id="title">Memory Dump</h1>
+
+  <div class="gallery-container">
+    <div class="gallery">
+      <img src="https://files.catbox.moe/d2pitz.jpg" alt="Foto 1" class="gallery-img">
+      <img src="https://files.catbox.moe/n0z37r.jpg" alt="Foto 2" class="gallery-img">
+      <img src="https://files.catbox.moe/d8tf73.jpg" alt="Foto 3" class="gallery-img">
+      <img src="https://files.catbox.moe/2x0lsy.jpg" alt="Foto 4" class="gallery-img">
+      <img src="https://files.catbox.moe/4mng4s.jpg" alt="Foto 5" class="gallery-img">
+      <img src="https://files.catbox.moe/vu39a6.jpg" alt="Foto 6" class="gallery-img">
+      <img src="https://files.catbox.moe/e75tx2.jpg" alt="Foto 7" class="gallery-img">
+      <img src="https://files.catbox.moe/8raj5x.jpg" alt="Foto 8" class="gallery-img">
+      <img src="https://files.catbox.moe/z5raav.jpg" alt="Foto 9" class="gallery-img">
+      <img src="https://files.catbox.moe/2cuw9z.jpg" alt="Foto 10" class="gallery-img">
+    </div>
+  </div>
+</div>
+
+<div class="music-player">
+  <img src="https://files.catbox.moe/otof75.jpg" alt="Cover">
+  <div class="track-info">
+    <div class="title">Style</div>
+    <div class="artist">Taylor Swift</div>
+    <input type="range" id="progress" value="0">
+    <div class="time"><span id="current">0:00</span> / <span id="duration">0:00</span></div>
+  </div>
+  <button id="playPause">▶️</button>
+  <audio id="audio" src="https://files.catbox.moe/njn5ax.mp3"></audio>
+</div>
+
+<div id="imgModal" class="modal">
+  <span class="close">&times;</span>
+  <img id="modalImg" src="">
+</div>
+
+<script>
+  // Modal Zoom
+  const modal = document.getElementById("imgModal");
+  const modalImg = document.getElementById("modalImg");
+  const closeBtn = document.querySelector(".close");
+  document.querySelectorAll(".gallery-img").forEach(img=>{
+    img.addEventListener("click", ()=>{
+      modal.style.display="flex";
+      modalImg.src=img.src;
+    });
+  });
+  closeBtn.onclick=()=>modal.style.display="none";
+  modal.onclick=(e)=>{ if(e.target===modal) modal.style.display="none"; };
+
+  // Back button ripple
+  const backBtn = document.querySelector('.back-btn');
+  backBtn.addEventListener('click', ()=>{
+    backBtn.classList.add('clicked');
+    setTimeout(()=>backBtn.classList.remove('clicked'),400);
+  });
+
+  // Music Player
+  const audio=document.getElementById("audio");
+  const playPause=document.getElementById("playPause");
+  const progress=document.getElementById("progress");
+  const currentTime=document.getElementById("current");
+  const durationTime=document.getElementById("duration");
+
+  playPause.addEventListener("click", ()=>{
+    if(audio.paused){ audio.play(); playPause.textContent="⏸️"; }
+    else{ audio.pause(); playPause.textContent="▶️"; }
+  });
+
+  audio.addEventListener("loadedmetadata", ()=>{
+    progress.max=Math.floor(audio.duration);
+    durationTime.textContent=formatTime(audio.duration);
+  });
+  audio.addEventListener("timeupdate", ()=>{
+    progress.value=Math.floor(audio.currentTime);
+    currentTime.textContent=formatTime(audio.currentTime);
+  });
+  progress.addEventListener("input", ()=>{ audio.currentTime=progress.value; });
+  function formatTime(sec){ const m=Math.floor(sec/60); const s=Math.floor(sec%60).toString().padStart(2,"0"); return `${m}:${s}`; }
+
+  // Background Stars
+  const canvas=document.getElementById("stars");
+  const ctx=canvas.getContext("2d");
+  let stars=[];
+  const numStars=200;
+  function resizeCanvas(){ canvas.width=window.innerWidth; canvas.height=window.innerHeight;}
+  window.addEventListener("resize", resizeCanvas);
+  resizeCanvas();
+  function initStars(){ stars=[]; for(let i=0;i<numStars;i++){ stars.push({x:Math.random()*canvas.width, y:Math.random()*canvas.height, radius:Math.random()*1.2+0.2, speed:Math.random()*0.5+0.1});}}
+  function drawStars(){ ctx.clearRect(0,0,canvas.width,canvas.height); ctx.fillStyle="white"; stars.forEach(s=>{ctx.beginPath(); ctx.arc(s.x,s.y,s.radius,0,Math.PI*2); ctx.fill();});}
+  function updateStars(){ stars.forEach(s=>{ s.y-=s.speed; if(s.y<0){s.y=canvas.height; s.x=Math.random()*canvas.width;} });}
+  function animateStars(){ drawStars(); updateStars(); requestAnimationFrame(animateStars);}
+  initStars(); animateStars();
+
+  // Gallery fade-in
+  const images=document.querySelectorAll('.gallery-img');
+  const observer=new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  },{threshold:0.1});
+  images.forEach(img=>observer.observe(img));
+
+  // Title typing animation
+  const title=document.getElementById('title');
+  const text=title.textContent;
+  title.textContent='';
+  let i=0;
+  function typeTitle(){
+    if(i<text.length){
+      title.textContent+=text.charAt(i);
+      i++;
+      setTimeout(typeTitle,150);
+    }else{
+      title.style.borderRight='none';
+    }
+  }
+  typeTitle();
+</script>
+</body>
+</html>

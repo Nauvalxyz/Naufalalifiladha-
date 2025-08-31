@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tentang Alifil</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <canvas id="stars"></canvas>
+
+  <div class="container">
+    <h1>TENTANG ALIFIL</h1>
+    <p>Halo, Saya <b>Naufal Alifil Adha</b>.  
+    Saya seorang [pelajar] yang tertarik pada [bidang minat: teknologi, sains, progamer, dll].
+Saya suka belajar hal baru, berbagi pengalaman, serta berkreasi melalui [hobi & karya].
+Dengan website ini, saya berharap bisa berbagi informasi dan menginspirasi banyak orang. ^_^ 
+
+    <a href="index.html" class="btn back-btn">⬅ Kembali</a>
+  </div>
+
+  <!-- Music Player -->
+  <div class="music-player">
+    <img src="https://files.catbox.moe/otof75.jpg" class="cover" alt="Cover">
+    <div class="track-info">
+      <div class="title">Style</div>
+      <div class="artist">Taylor Swift</div>
+      <input type="range" id="progress" value="0">
+      <div class="time">
+        <span id="current">0:00</span> / <span id="duration">0:00</span>
+      </div>
+    </div>
+    <button id="playPause">▶️</button>
+    <audio id="audio" src="https://files.catbox.moe/njn5ax.mp3"></audio>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

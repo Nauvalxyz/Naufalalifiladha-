@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>All Sosmed</title>
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Favicon -->
+  <link rel="icon" href="https://files.catbox.moe/2krtm5.png" type="image/png">
+
+  <style>
+    body {
+      opacity: 0;
+      animation: fadeIn 1s ease-in forwards;
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    #stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: black;
+    }
+
+    /* Sosmed list */
+    .sosmed-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .sosmed-list li {
+      margin: 15px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .sosmed-list img {
+      width: 28px;
+      height: 28px;
+      margin-right: 10px;
+      border-radius: 6px;
+      transition: 0.3s;
+    }
+
+    .sosmed-list a {
+      color: #fff;
+      font-size: 20px;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+    .sosmed-list li:hover img {
+      filter: drop-shadow(0 0 8px #fff);
+    }
+
+    .sosmed-list a:hover {
+      text-shadow: 0 0 10px #fff;
+    }
+  </style>
+</head>
+<body>
+  <!-- Background Galaxy -->
+  <canvas id="stars"></canvas>
+
+  <!-- Konten Sosmed -->
+  <div class="page">
+    <h2>Sosial Media</h2>
+    <ul class="sosmed-list">
+      <li>
+        <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram">
+        <a href="https://instagram.com/somelif__" target="_blank" class="glow">Instagram</a>
+      </li>
+      <li>
+        <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png" alt="TikTok">
+        <a href="https://tiktok.com/@anomalibakso2" target="_blank" class="glow">TikTok</a>
+      </li>
+      <li>
+        <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook">
+        <a href="https://www.facebook.com/Alifil Xcr" target="_blank" class="glow">Facebook</a>
+      </li>
+    </ul>
+    <a href="index.html" class="btn back-btn">⬅ Kembali</a>
+  </div>
+
+  <!-- Music Player -->
+  <div class="music-player">
+    <img src="https://files.catbox.moe/otof75.jpg" class="cover" alt="Cover">
+    <div class="track-info">
+      <div class="title">Style</div>
+      <div class="artist">Taylor Swift</div>
+      <input type="range" id="progress" value="0">
+      <div class="time">
+        <span id="current">0:00</span> / <span id="duration">0:00</span>
+      </div>
+    </div>
+    <button id="playPause">▶️</button>
+    <audio id="audio" src="https://files.catbox.moe/njn5ax.mp3"></audio>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
